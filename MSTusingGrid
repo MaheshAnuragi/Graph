@@ -1,0 +1,63 @@
+package Graph;
+import java.util.*;
+public class MST {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int v = sc.nextInt();
+        int e = sc.nextInt();
+        int adj[][] = new int[v+1][v+1];
+        for(int i=0;i<e;i++){
+            int v1 = sc.nextInt();
+            int v2 = sc.nextInt();
+            int weight = sc.nextInt();
+            adj[v1][v2] = weight;
+            adj[v2][v1] = weight;
+        }
+        System.out.println(prim(adj));
+    }
+
+    public static int minWeight(int[] weight, boolean [] visited){
+        int V = weight.length;
+        int min = 100000000, minIndex=-1;
+        for(int v=0;v<V;v++){
+            if(!visited[v] && weight[v]<min){
+                min=weight[v];
+                minIndex=v;
+            }
+        }
+        return minIndex;
+    }
+
+    public static int prim(int[][] adj){
+        int V = adj.length;
+        int[] parent = new int[V];
+        int[] weight = new int[V];
+        boolean[] visited = new boolean[V];
+
+        for(int i=0;i<V;i++){
+            weight[i]=100000000;
+            visited[i]=false;
+            parent[i]=-1;
+        }
+        weight[1]=0;
+
+        for (int i=0;i<V-1;i++){
+            int u = minWeight(weight,visited);
+            visited[u]=true;
+            for(int v=0;v<V;v++){
+                if(adj[u][v]!=0 && visited[v]==false && adj[u][v]<weight[v]){
+                    parent[v]=u;
+                    weight[v]=adj[u][v];
+                }
+            }
+        }
+
+        int sum=0;
+        for(int i=0;i<V;i++){
+            if(weight[i]<100000000){
+                sum+=weight[i];
+            }
+        }
+        return sum;
+    }
+}
