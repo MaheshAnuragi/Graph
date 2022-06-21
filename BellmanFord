@@ -1,0 +1,69 @@
+package Graph;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+class Nodess {
+    int u;
+    int v;
+    int weight;
+
+    Nodess(int u, int v, int weight){
+        this.u = u;
+        this.v = v;
+        this.weight = weight;
+    }
+
+    Nodess() {}
+
+    int getV() {return v;}
+    int getWeight() {return weight;}
+    int getU() {return u;}
+}
+public class BellmanFord {
+    public static void bellmanFord(ArrayList<Nodess> adj, int V, int source){
+
+        int dist[] = new int[V];
+        Arrays.fill(dist,100000000);
+        dist[source]=0;
+
+        for(int i=1;i<=V-1;i++){
+            for(Nodess curr :adj){
+                if(dist[curr.getU()]+curr.getWeight()<dist[curr.getV()]){
+                    dist[curr.getV()]=dist[curr.getU()]+curr.getWeight();
+                }
+            }
+        }
+
+        int f1=0;
+        for(Nodess curr : adj){
+            if(dist[curr.getU()]+curr.getWeight()<dist[curr.getV()]){
+                f1=1;
+                System.out.println("Negative Cycle");
+                break;
+            }
+        }
+
+        if(f1==0){
+            for(int i=0;i<V;i++){
+                System.out.print(dist[i]+" ");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int V = 6;
+        ArrayList<Nodess> adj = new ArrayList<>();
+
+        adj.add(new Nodess(3,2,-6));
+        adj.add(new Nodess(5,3,-1));
+        adj.add(new Nodess(0,1,-5));
+        adj.add(new Nodess(1,5,-3));
+        adj.add(new Nodess(1,2,-2));
+        adj.add(new Nodess(3,4,-2));
+        adj.add(new Nodess(2,4,-3));
+
+        bellmanFord(adj,V,0);
+
+    }
+}
